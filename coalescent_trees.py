@@ -22,11 +22,10 @@ class Kingman:
         k = n   # setting lineages to n
         t = 0
 
-        leaves = []
         for i in range(n):
-            leaves.append(Node(f'leaf {i}'))
+            self.leaves.append(Node(f'leaf {i}'))
 
-        for i in leaves:
+        for i in self.leaves:
             print(i.get_label())
 
         while k > 2:
@@ -39,15 +38,18 @@ class Kingman:
             m = Node()
             m.set_height(t)
 
-            children = ra.sample(leaves, 2)
-            for node in children:
-                m.add_child(node)
+            leaf_indices = ra.sample([i for i in range(len(self.leaves))],
+                                     2)
+            for i in leaf_indices:
+                # m.add_child(leaf_indices)
+                m.add_child(self.leaves.pop(i))
 
             for i in m.get_leaves():
                 print(i.get_label())
             # for i in children:
             #     print(i.get_label())
 
+            print(self.leaves)
 
 
             # print(t_k)
