@@ -222,4 +222,4 @@ class Node:
 tree = compute_upgma_tree([[0, 4, 8, 8], [4, 0, 8, 8], [8, 8, 0, 6], [8, 8, 6, 0]])
 
 # Plot the tree
-plot_tree(tree)
+#plot_tree(tree)
