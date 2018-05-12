@@ -25,34 +25,33 @@ class Kingman:
         for i in range(n):
             self.leaves.append(Node(f'leaf {i}'))
 
-        for i in self.leaves:
-            print(i.get_label())
-
         while k > 2:
+            # updating time, t
             t_k = math.exp(self.ncr(k, 2)/pop_size)
             t = t + t_k
 
-            print(t)
-
-            # new node m, with height t, and random children from available leaves.
+            # new node m, with height t, and random children from available leaves and popping them
             m = Node()
             m.set_height(t)
+            m_num_children = 2
 
-            leaf_indices = ra.sample([i for i in range(len(self.leaves))],
-                                     2)
-            for i in leaf_indices:
-                # m.add_child(leaf_indices)
-                m.add_child(self.leaves.pop(i))
+            for i in range(m_num_children):
+                m.add_child(self.leaves.pop(ra.randint(0, len(self.leaves)-1)))
 
+            print("m's children are:")
             for i in m.get_leaves():
                 print(i.get_label())
-            # for i in children:
-            #     print(i.get_label())
+            print()
 
-            print(self.leaves)
+            print("leftover leaves:")
+            for i in self.leaves:
+                print(i.get_label())
+            print()
 
+            # adding m to set of available nodes
+            self.leaves.append(m)
 
-            # print(t_k)
+            # one less lineage
             k -= 1
 
     @staticmethod
@@ -69,7 +68,7 @@ class Kingman:
 
 def main():
     kingman = Kingman()
-    kingman.simulate_trees(3, 10)
+    kingman.simulate_trees(5, 10)
     # x = ra.randint(0, 4)
     # print(x)
 
