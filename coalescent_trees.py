@@ -29,7 +29,7 @@ class Kingman:
 
         while k > 2:
             # updating time, t
-            t_k = self.ncr(k, 2)/pop_size
+            t_k = 1/(self.ncr(k, 2)/pop_size)
             t = t + t_k
 
             # new node m, with height t, and random children from available leaves and popping them
@@ -76,11 +76,11 @@ class Kingman:
 def main():
     kingman = Kingman()
     kingman.simulate_trees(10, 100)
-    # print(kingman.root_node.get_label())
+    print(kingman.root_node.get_label())
     #
-    # print(kingman.root_node.height)
-    # tm = 2*2000*(1 - (1/1000))
-    # print(tm)
+    print(kingman.root_node.get_height())
+    tm = 2*100*(1 - (1/10))
+    print(tm)
 
     # x = ra.randint(0, 4)
     # print(x)
