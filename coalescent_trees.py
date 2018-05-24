@@ -29,6 +29,7 @@ class Kingman:
 
         while k > 2:
             # updating time, t
+            # Wrap this around an exponential distribution (Random number generator!)
             t_k = 1/(self.ncr(k, 2)/pop_size)
             t = t + t_k
 
