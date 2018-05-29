@@ -2,6 +2,7 @@ import tree
 # from itertools import combinations
 import math
 import random as ra
+import numpy as np
 
 class Kingman:
     """ For all the operations to create a Kingman coalescent model
@@ -30,7 +31,8 @@ class Kingman:
         while k > 2:
             # updating time, t
             # Wrap this around an exponential distribution (Random number generator!)
-            t_k = 1/(self.ncr(k, 2)/pop_size)
+            rate = self.ncr(k, 2)/pop_size
+            t_k = np.random.exponential(1/rate)
             t = t + t_k
 
             # new node m, with height t, and random children from available leaves and popping them
@@ -80,8 +82,8 @@ def main():
     print(kingman.root_node.get_label())
     #
     print(kingman.root_node.get_height())
-    tm = 2*100*(1 - (1/10))
-    print(tm)
+    theoretical_mean = 2*100*(1 - (1/10))
+    print(theoretical_mean)
 
     # x = ra.randint(0, 4)
     # print(x)
