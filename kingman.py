@@ -66,7 +66,7 @@ class Kingman:
             # print("New loop --------")
 
         self.root_node = m
-        return self.root_node.get_height()
+        return tree.Tree(self.root_node)
 
     def simulate_trees(self, number_of_sims):
         """ Simulates a tree ~number_of_sims~ times.
@@ -76,7 +76,7 @@ class Kingman:
 
         sum = 0
         for i in range(number_of_sims):
-            sum += self.simulate_one_tree(10, 100)
+            sum += self.simulate_one_tree(10, 100).get_root().get_height()
 
         print(sum)
         mean = sum/number_of_sims
@@ -109,4 +109,4 @@ def main():
 
 
 
-main()
+# main()
