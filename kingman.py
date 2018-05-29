@@ -33,6 +33,7 @@ class Kingman:
             # updating time, t
             # Wrap this around an exponential distribution (Random number generator!)
             rate = self.ncr(k, 2)/pop_size
+            # print(rate)
             t_k = np.random.exponential(1/rate)
             t = t + t_k
 
@@ -100,7 +101,7 @@ def main():
     tree.plot_tree(my_tree)
 
     theoretical_mean = 2*100*(1 - (1/10))
-    print(theoretcal_mean)
+    print(theoretical_mean)
 
 
     mean = kingman.simulate_trees(1000)
