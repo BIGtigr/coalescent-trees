@@ -100,7 +100,7 @@ def main():
     tree.plot_tree(my_tree)
 
     theoretical_mean = 2*100*(1 - (1/10))
-    print(theoretical_mean)
+    print(theoretcal_mean)
 
 
     mean = kingman.simulate_trees(1000)
