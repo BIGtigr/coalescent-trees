@@ -11,7 +11,7 @@ class Kingman:
         self.leaves = []
         self.root_node = None
 
-    def simulate_trees(self, n, pop_size):
+    def simulate_one_tree(self, n, pop_size):
         """ Simulates trees according to the Kingman coalescent model.
     
         inputs: number of leaves, n; effective population size, pop_size
@@ -27,6 +27,7 @@ class Kingman:
         node_count = n
         for i in range(node_count):
             self.leaves.append(tree.Node(f'leaf {i}'))
+
 
         while k > 2:
             # updating time, t
@@ -57,12 +58,28 @@ class Kingman:
 
             # adding m to set of available nodes
             self.leaves.append(m)
-            self.root_node = m
+
 
             # one less lineage
             k -= 1
             # print("New loop --------")
 
+        self.root_node = m
+        return self.root_node.get_height()
+
+    def simulate_trees(self, number_of_sims):
+        """ Simulates a tree ~number_of_sims~ times.
+        :param number_of_sims: number of simulations (int)
+        :return:  mean height of all simluated trees
+        """
+
+        sum = 0
+        for i in range(number_of_sims):
+            sum += self.simulate_one_tree(10, 100)
+
+        print(sum)
+        mean = sum/number_of_sims
+        return mean
 
     @staticmethod
     def ncr(n, r):
@@ -78,16 +95,15 @@ class Kingman:
 
 def main():
     kingman = Kingman()
-    kingman.simulate_trees(10, 100)
-    print(kingman.root_node.get_label())
-    #
-    print(kingman.root_node.get_height())
+    height=kingman.simulate_one_tree(10, 100)
+
     theoretical_mean = 2*100*(1 - (1/10))
     print(theoretical_mean)
 
-    # x = ra.randint(0, 4)
-    # print(x)
-    my_tree = tree.Tree(kingman.root_node)
-    tree.plot_tree(my_tree)
+    # my_tree = tree.Tree(kingman.root_node)
+    # tree.plot_tree(my_tree)
+
+    mean = kingman.simulate_trees(1000)
+    print(mean)
 
 main()
