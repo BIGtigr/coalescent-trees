@@ -29,7 +29,7 @@ class Kingman:
             self.leaves.append(tree.Node(f'leaf {i}'))
 
 
-        while k > 2:
+        while k > 1:
             # updating time, t
             # Wrap this around an exponential distribution (Random number generator!)
             rate = self.ncr(k, 2)/pop_size
@@ -95,15 +95,17 @@ class Kingman:
 
 def main():
     kingman = Kingman()
-    height=kingman.simulate_one_tree(10, 100)
+    kingman.simulate_one_tree(10, 100)
+    my_tree = tree.Tree(kingman.root_node)
+    tree.plot_tree(my_tree)
 
     theoretical_mean = 2*100*(1 - (1/10))
     print(theoretical_mean)
 
-    # my_tree = tree.Tree(kingman.root_node)
-    # tree.plot_tree(my_tree)
 
     mean = kingman.simulate_trees(1000)
     print(mean)
+
+
 
 main()
