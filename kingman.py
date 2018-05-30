@@ -29,7 +29,7 @@ class Kingman:
 
         # Initialising node labels, heights to zero, and matrix
         node_count = n
-        self.available_nodes = [tree.Node(str(i + 1)) for i in range(n)]
+        self.available_nodes = [tree.Node(str(i)) for i in range(n)]
         for node in self.available_nodes:
             node.set_height(0)
         # matrix = {available_nodes[i]: {available_nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
@@ -41,42 +41,38 @@ class Kingman:
             t = t + t_k
 
             # new node m, with height t, and random children from available_nodes and popping them
-            m = tree.Node(str(n))
+            m = tree.Node(str(node_count))
             node_count += 1
             m.set_height(t)
-            m_num_children = 2
-            node_count += 1
 
-            # Gets the combinations of 2 different nodes (pairs) from the available_nodes and setting into a list
-            pairs = it.combinations(self.available_nodes, 2)
-            pairs = [(i[0].get_label(), i[1].get_label()) for i in pairs]
+            # Gets the combinations of 2 different nodes and their indices (pairs) from the available_nodes
+            # Then setting into a list
+            pairs = it.combinations(enumerate(self.available_nodes), 2)
+            pairs = [(i[0], i[1]) for i in pairs]
+            # At this point each node in a pair is a tuple -> (available_nodes index, node object)
 
+            # Selecting a random pair (by index) and setting as children of m
+            # Note: index [0] is the index from available nodes | [1] is the node object
+            pairs_index = choice(range(len(pairs)))
+            left_child = pairs[pairs_index][0]
+            right_child = pairs[pairs_index][1]
+            m.add_child(left_child[1])
+            m.add_child(right_child[1])
 
-            print('done')
-
-
-            # for i in range(m_num_children):
-            #     m.add_child(self.available_nodes.pop(ra.randint(0, len(self.available_nodes)-1)))
-
-
-
-            # print("m's children are:")
-            # for i in m.get_children():
-            #     print(i.get_label())
-            # print()
-
-            # print("leftover available_nodes:")
-            # for i in self.available_nodes:
-            #     print(i.get_label())
-            # print()
+            # Removing added children from list of available_nodes
+            # Popping right child first to maintain index integrity of available_nodes
+            index_to_pop = right_child[0]
+            self.available_nodes.pop(index_to_pop)
+            index_to_pop = left_child[0]
+            self.available_nodes.pop(index_to_pop)
 
             # adding m to set of available_nodes
-            # self.available_nodes.append(m)
-
+            self.available_nodes.append(m)
 
             # one less lineage
             k -= 1
-            # print("New loop --------")
+
+            # ----- End of While Loop -----
 
         self.root_node = m
         return self.root_node.get_height()
@@ -91,8 +87,8 @@ class Kingman:
         for i in range(number_of_sims):
             sum += self.simulate_one_tree(10, 100)
 
-        print(sum)
         mean = sum/number_of_sims
+
         return mean
 
     @staticmethod
@@ -110,15 +106,15 @@ class Kingman:
 def main():
     kingman = Kingman()
     kingman.simulate_one_tree(10, 100)
-    # my_tree = tree.Tree(kingman.root_node)
-    # tree.plot_tree(my_tree)
-    #
-    # theoretical_mean = 2*100*(1 - (1/10))
-    # print(theoretical_mean)
-    #
-    #
-    # mean = kingman.simulate_trees(1000)
-    # print(mean)
+
+    theoretical_mean = 2*100*(1 - (1/10))
+    print(theoretical_mean)
+
+    mean = kingman.simulate_trees(1000)
+    print(mean)
+
+    my_tree = tree.Tree(kingman.root_node)
+    tree.plot_tree(my_tree)
 
 
 
