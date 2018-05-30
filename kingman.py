@@ -1,7 +1,5 @@
 import tree
-# from itertools import combinations
 import math
-import random as ra
 import numpy as np
 
 class Kingman:
@@ -17,8 +15,7 @@ class Kingman:
         inputs: number of available_nodes, n; effective population size, pop_size
         output: coalescent tree with n available_nodes.
         """
-
-        import itertools as it
+        from itertools import combinations
         from random import choice
 
         # each pair of lineages coalesces at rate 1/pop_size
@@ -47,7 +44,7 @@ class Kingman:
 
             # Gets the combinations of 2 different nodes and their indices (pairs) from the available_nodes
             # Then setting into a list
-            pairs = it.combinations(enumerate(self.available_nodes), 2)
+            pairs = combinations(enumerate(self.available_nodes), 2)
             pairs = [(i[0], i[1]) for i in pairs]
             # At this point each node in a pair is a tuple -> (available_nodes index, node object)
 
