@@ -8,14 +8,14 @@ class Kingman:
     """ For all the operations to create a Kingman coalescent model
     """
     def __init__(self):
-        self.leaves = []
+        self.nodes = []
         self.root_node = None
 
     def simulate_one_tree(self, n, pop_size):
         """ Simulates trees according to the Kingman coalescent model.
     
-        inputs: number of leaves, n; effective population size, pop_size
-        output: coalescent tree with n leaves.
+        inputs: number of nodes, n; effective population size, pop_size
+        output: coalescent tree with n nodes.
         """
 
         # each pair of lineages coalesces at rate 1/pop_size
@@ -25,8 +25,8 @@ class Kingman:
         t = 0
 
         node_count = n
-        for i in range(node_count):
-            self.leaves.append(tree.Node(f'leaf {i}'))
+        # Setting the label of each node to this node number
+        self.nodes = [tree.Node(str(i + 1)) for i in range(n)]
 
 
         while k > 1:
@@ -37,7 +37,7 @@ class Kingman:
             t_k = np.random.exponential(1/rate)
             t = t + t_k
 
-            # new node m, with height t, and random children from available leaves and popping them
+            # new node m, with height t, and random children from available nodes and popping them
             m = tree.Node(f'leaf {node_count}')
             m.set_height(t)
             m_num_children = 2
@@ -45,20 +45,20 @@ class Kingman:
             # print(f"new {m.get_label()}")
 
             for i in range(m_num_children):
-                m.add_child(self.leaves.pop(ra.randint(0, len(self.leaves)-1)))
+                m.add_child(self.nodes.pop(ra.randint(0, len(self.nodes)-1)))
 
             # print("m's children are:")
             # for i in m.get_children():
             #     print(i.get_label())
             # print()
 
-            # print("leftover leaves:")
-            # for i in self.leaves:
+            # print("leftover nodes:")
+            # for i in self.nodes:
             #     print(i.get_label())
             # print()
 
             # adding m to set of available nodes
-            self.leaves.append(m)
+            self.nodes.append(m)
 
 
             # one less lineage
