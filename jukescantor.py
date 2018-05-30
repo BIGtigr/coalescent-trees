@@ -32,9 +32,6 @@ def mutate(sequence, time, mu):
     # Calculating the number of mutaitons according to a poisson distribution with total rate length*time*mu
     numMutation = np.random.poisson(length*time*mu)
 
-    print(f"Number of mutations: {numMutation}")
-    print(f"Original Sequence = {sequence}")
-
     # For each mutation, choose a site and mutate it
     bases = 'ACTG'
     for i in range(numMutation):
@@ -42,11 +39,18 @@ def mutate(sequence, time, mu):
         site = math.floor(np.random.random() * length)
         sequence[site] = ra.choice(bases)
 
-    print(f"Mutated Sequence = {sequence}")
     return sequence
 
-def foo(node, sequence, time=1, mu=0.3):
-    # new_sequence = sequence
+def mutate_tree(node, sequence, time=1, mu=0.3):
+    """ Recursively mutates down the branches of a tree at node
+    
+    :param node: Node to mutate and recursively mutate it's children
+    :param sequence: the sequence of that parent node
+    :param time: default value of 1
+    :param mu: default value of 0.3
+    :return: None. Just manipulates the self.sequence of a node
+    """
+
     if node.is_root() == False:
         sequence = mutate(sequence, time, mu)
     node.set_sequence(sequence)
@@ -54,8 +58,8 @@ def foo(node, sequence, time=1, mu=0.3):
     if node.is_leaf() == True:
         return
     else:
-        foo(node.get_children()[0], list(sequence))     # get LEFT child
-        foo(node.get_children()[1], list(sequence))     # get RIGHT child
+        mutate_tree(node.get_children()[0], list(sequence))     # get LEFT child
+        mutate_tree(node.get_children()[1], list(sequence))     # get RIGHT child
 
 
 def ncr(n, r):
@@ -69,24 +73,12 @@ def ncr(n, r):
     return f(n) // (f(r) * f(n - r))
 
 def main():
-    # seq = random_sequence(5)
-
-    testseq = ['A', 'T', 'C', 'G']
-    time = 1
-    mu = 0.3
-
-    # mutate(testseq, time, mu)
-
     myKingman = Kingman()
     myTree = myKingman.simulate_one_tree(4, 100)
-
-    # myTree.get_root().set_sequence(sequence)
-    print(f"The root has sequence = {myTree.get_root().get_sequence()}")
     tree.plot_tree(myTree)
 
-    foo(myTree.get_root(), testseq)
-
-
+    rand_sequence = random_sequence(5)
+    mutate_tree(myTree.get_root(), rand_sequence)
 
 
 
