@@ -8,15 +8,17 @@ class Kingman:
     """ For all the operations to create a Kingman coalescent model
     """
     def __init__(self):
-        self.leaves = []
+        self.available_nodes = []
         self.root_node = None
 
     def simulate_one_tree(self, n, pop_size):
         """ Simulates trees according to the Kingman coalescent model.
     
-        inputs: number of leaves, n; effective population size, pop_size
-        output: coalescent tree with n leaves.
+        inputs: number of available_nodes, n; effective population size, pop_size
+        output: coalescent tree with n available_nodes.
         """
+
+        import itertools as it
 
         # each pair of lineages coalesces at rate 1/pop_size
         # given k lineages, total rate of coalescence is combination(k, 2)/pop_size
@@ -24,40 +26,48 @@ class Kingman:
         k = n   # setting lineages to n
         t = 0
 
+        # Initialising node labels, heights to zero, and matrix
         node_count = n
-        for i in range(node_count):
-            self.leaves.append(tree.Node(f'leaf {i}'))
-
+        self.available_nodes = [tree.Node(str(i + 1)) for i in range(n)]
+        for node in self.available_nodes:
+            node.set_height(0)
+        # matrix = {available_nodes[i]: {available_nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
 
         while k > 1:
             # updating time, t
-            # Wrap this around an exponential distribution (Random number generator!)
             rate = self.ncr(k, 2)/pop_size
             t_k = np.random.exponential(1/rate)
             t = t + t_k
 
-            # new node m, with height t, and random children from available leaves and popping them
-            m = tree.Node(f'leaf {node_count}')
+            # new node m, with height t, and random children from available_nodes and popping them
+            m = tree.Node(str(n))
+            node_count += 1
             m.set_height(t)
             m_num_children = 2
             node_count += 1
-            # print(f"new {m.get_label()}")
 
-            for i in range(m_num_children):
-                m.add_child(self.leaves.pop(ra.randint(0, len(self.leaves)-1)))
+            yo = it.combinations(self.available_nodes, 2)
+            for i in yo:
+                print(i[0].get_label(), i[1].get_label())
+            print('done')
+
+            # for i in range(m_num_children):
+            #     m.add_child(self.available_nodes.pop(ra.randint(0, len(self.available_nodes)-1)))
+
+
 
             # print("m's children are:")
             # for i in m.get_children():
             #     print(i.get_label())
             # print()
 
-            # print("leftover leaves:")
-            # for i in self.leaves:
+            # print("leftover available_nodes:")
+            # for i in self.available_nodes:
             #     print(i.get_label())
             # print()
 
-            # adding m to set of available nodes
-            self.leaves.append(m)
+            # adding m to set of available_nodes
+            # self.available_nodes.append(m)
 
 
             # one less lineage
@@ -96,15 +106,15 @@ class Kingman:
 def main():
     kingman = Kingman()
     kingman.simulate_one_tree(10, 100)
-    my_tree = tree.Tree(kingman.root_node)
-    tree.plot_tree(my_tree)
-
-    theoretical_mean = 2*100*(1 - (1/10))
-    print(theoretical_mean)
-
-
-    mean = kingman.simulate_trees(1000)
-    print(mean)
+    # my_tree = tree.Tree(kingman.root_node)
+    # tree.plot_tree(my_tree)
+    #
+    # theoretical_mean = 2*100*(1 - (1/10))
+    # print(theoretical_mean)
+    #
+    #
+    # mean = kingman.simulate_trees(1000)
+    # print(mean)
 
 
 
