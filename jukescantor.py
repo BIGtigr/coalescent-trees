@@ -1,8 +1,8 @@
 import random as ra
 import math
 import numpy as np
-from kingman import Kingman
 import tree
+from kingman import Kingman
 
 def random_sequence(length):
     """ Generates a random sequence of DNA bases of a given length
@@ -46,15 +46,16 @@ def mutate(sequence, time, mu):
     return sequence
 
 def foo(node, sequence, time=1, mu=0.3):
+    # new_sequence = sequence
     if node.is_root() == False:
         sequence = mutate(sequence, time, mu)
     node.set_sequence(sequence)
 
-    if node.is_leaf == True:
+    if node.is_leaf() == True:
         return
     else:
-        foo(node.get_children()[0], sequence)     # get LEFT child
-        foo(node.get_children()[1], sequence)     # get RIGHT child
+        foo(node.get_children()[0], list(sequence))     # get LEFT child
+        foo(node.get_children()[1], list(sequence))     # get RIGHT child
 
 
 def ncr(n, r):
@@ -68,23 +69,22 @@ def ncr(n, r):
     return f(n) // (f(r) * f(n - r))
 
 def main():
-    seq = random_sequence(5)
-    # print(seq)
-    sequence = ['A', 'T', 'C', 'G']
+    # seq = random_sequence(5)
+
+    testseq = ['A', 'T', 'C', 'G']
     time = 1
     mu = 0.3
 
-    mutate(sequence, time, mu)
-
+    # mutate(testseq, time, mu)
 
     myKingman = Kingman()
     myTree = myKingman.simulate_one_tree(4, 100)
 
-    myTree.get_root().set_sequence(sequence)
+    # myTree.get_root().set_sequence(sequence)
     print(f"The root has sequence = {myTree.get_root().get_sequence()}")
     tree.plot_tree(myTree)
 
-    foo(myTree.get_root(), seq)
+    foo(myTree.get_root(), testseq)
 
 
 
