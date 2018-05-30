@@ -19,6 +19,7 @@ class Kingman:
         """
 
         import itertools as it
+        from random import choice
 
         # each pair of lineages coalesces at rate 1/pop_size
         # given k lineages, total rate of coalescence is combination(k, 2)/pop_size
@@ -46,10 +47,13 @@ class Kingman:
             m_num_children = 2
             node_count += 1
 
-            yo = it.combinations(self.available_nodes, 2)
-            for i in yo:
-                print(i[0].get_label(), i[1].get_label())
+            # Gets the combinations of 2 different nodes (pairs) from the available_nodes and setting into a list
+            pairs = it.combinations(self.available_nodes, 2)
+            pairs = [(i[0].get_label(), i[1].get_label()) for i in pairs]
+
+
             print('done')
+
 
             # for i in range(m_num_children):
             #     m.add_child(self.available_nodes.pop(ra.randint(0, len(self.available_nodes)-1)))
