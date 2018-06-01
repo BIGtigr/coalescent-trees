@@ -4,6 +4,7 @@ import numpy as np
 import tree
 from kingman import Kingman
 
+
 def random_sequence(length):
     """ Generates a random sequence of DNA bases of a given length
     
@@ -18,6 +19,7 @@ def random_sequence(length):
 
     return sequence
 
+
 def mutate(sequence, time, mu):
     """ Mutates a given sequence according to the Jukes-Cantor model of mutation
     
@@ -30,7 +32,7 @@ def mutate(sequence, time, mu):
     length = len(sequence)
 
     # Calculating the number of mutaitons according to a poisson distribution with total rate length*time*mu
-    numMutation = np.random.poisson(length*time*mu)
+    numMutation = np.random.poisson(length * time * mu)
 
     # For each mutation, choose a site and mutate it
     bases = 'ACTG'
@@ -40,6 +42,7 @@ def mutate(sequence, time, mu):
         sequence[site] = ra.choice(bases)
 
     return sequence
+
 
 def mutate_tree(node, sequence, time=1, mu=0.3):
     """ Recursively mutates down the branches of a tree at node
@@ -58,8 +61,20 @@ def mutate_tree(node, sequence, time=1, mu=0.3):
     if node.is_leaf() == True:
         return
     else:
-        mutate_tree(node.get_children()[0], list(sequence))     # get LEFT child
-        mutate_tree(node.get_children()[1], list(sequence))     # get RIGHT child
+        mutate_tree(node.get_children()[0], list(sequence))  # get LEFT child
+        mutate_tree(node.get_children()[1], list(sequence))  # get RIGHT child
+
+
+def fraction_xy(xy):
+    num_differing_sites = 0
+    length = 0
+    f_xy = np.amin([num_differing_sites / length, 0.75 - (1 / length)])
+    return f_xy
+
+
+def jukes_cantor_distance():
+    d_xy = (-3 / 4) * math.log10(1 - (4 * fraction_xy(x, y) / 3))
+    return d_xy
 
 
 def distance_matrix():
@@ -67,6 +82,15 @@ def distance_matrix():
     
     :return: 
     """
+
+    # Creating the matrix
+    # matrix = {nodes[i]: {nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
+
+    # Distance between sequences x and y
+    # d_xy = jukes_cantor_distance()
+
+
+
 
 def ncr(n, r):
     """ nCr caclculation. n choose r. combinations with repetition
@@ -78,15 +102,14 @@ def ncr(n, r):
     f = math.factorial
     return f(n) // (f(r) * f(n - r))
 
+
 def main():
-    myKingman = Kingman()
-    myTree = myKingman.simulate_one_tree(4, 100)
-    tree.plot_tree(myTree)
-
-    rand_sequence = random_sequence(5)
-    mutate_tree(myTree.get_root(), rand_sequence)
-
-
+    # myKingman = Kingman()
+    # myTree = myKingman.simulate_one_tree(4, 100)
+    # tree.plot_tree(myTree)
+    #
+    # rand_sequence = random_sequence(5)
+    # mutate_tree(myTree.get_root(), rand_sequence)
 
 
 main()
