@@ -62,6 +62,12 @@ def mutate_tree(node, sequence, time=1, mu=0.3):
         mutate_tree(node.get_children()[1], list(sequence))     # get RIGHT child
 
 
+def distance_matrix():
+    """ Calculates the Jukes-Cantor distance matrix from a set of sequences
+    
+    :return: 
+    """
+
 def ncr(n, r):
     """ nCr caclculation. n choose r. combinations with repetition
 
