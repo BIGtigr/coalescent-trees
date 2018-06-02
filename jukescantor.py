@@ -65,30 +65,52 @@ def mutate_tree(node, sequence, time=1, mu=0.3):
         mutate_tree(node.get_children()[1], list(sequence))  # get RIGHT child
 
 
+def num_differing_sites(x, y):
+    """ Calculates the number of differing sites between two sequences of the same length
+    
+    :param x: DNA sequence of length, 'length'
+    :param y: DNA sequence of length, 'length'
+    :return: number of differing sites between x and y
+    """
+
+    # Note: if extending this method for sequences of different length
+    #       use try statements
+
+    count = 0
+    for i, base in enumerate(x):
+        if x[i] != y[i]:
+            count += 1
+    return count
+
 def fraction_xy(xy):
     num_differing_sites = 0
     length = 0
-    f_xy = np.amin([num_differing_sites / length, 0.75 - (1 / length)])
+    f_xy = np.amin([num_differing_sites(x, y) / length, 0.75 - (1 / length)])
     return f_xy
 
 
-def jukes_cantor_distance():
+def distance_xy():
     d_xy = (-3 / 4) * math.log10(1 - (4 * fraction_xy(x, y) / 3))
     return d_xy
 
 
-def distance_matrix():
+def distance_matrix(x, y):
     """ Calculates the Jukes-Cantor distance matrix from a set of sequences
     
-    :return: 
+    :param x: DNA sequence of length, 'length'
+    :param y: DNA sequence of length, 'length'
+    :return: Jukes-cantor distance matrix between sequences x and y
     """
 
     # Creating the matrix
     # matrix = {nodes[i]: {nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
 
     # Distance between sequences x and y
-    # d_xy = jukes_cantor_distance()
+    # d_xy = distance_xy()
 
+
+    yo = num_differing_sites(x, y)
+    print(yo)
 
 
 
@@ -111,5 +133,9 @@ def main():
     # rand_sequence = random_sequence(5)
     # mutate_tree(myTree.get_root(), rand_sequence)
 
+    seq1 = ["A", "C", "T", "G"]
+    seq2 = ["A", "C", "T", "T"]
+
+    distance_matrix(seq1, seq2)
 
 main()
