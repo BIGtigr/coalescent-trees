@@ -82,17 +82,21 @@ def num_differing_sites(x, y):
             count += 1
     return count
 
-def fraction_xy(xy):
-    num_differing_sites = 0
-    length = 0
-    f_xy = np.amin([num_differing_sites(x, y) / length, 0.75 - (1 / length)])
-    return f_xy
+def fraction_xy(x, y):
+    """ Returns the fraction of differing sites between two sequences x and y (equal length)
+    
+    :param x: DNA sequence of length, 'length'
+    :param y: DNA sequence of length, 'length'
+    :return: fraction of differing sites between x and y
+    """
 
+    length = len(x)
+    f_xy = min([num_differing_sites(x, y) / length, 0.75 - (1 / length)])
+    return f_xy
 
 def distance_xy():
     d_xy = (-3 / 4) * math.log10(1 - (4 * fraction_xy(x, y) / 3))
     return d_xy
-
 
 def distance_matrix(x, y):
     """ Calculates the Jukes-Cantor distance matrix from a set of sequences
@@ -108,8 +112,7 @@ def distance_matrix(x, y):
     # Distance between sequences x and y
     # d_xy = distance_xy()
 
-
-    yo = num_differing_sites(x, y)
+    yo = fraction_xy(x, y)
     print(yo)
 
 
