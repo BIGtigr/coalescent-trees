@@ -94,8 +94,15 @@ def fraction_xy(x, y):
     f_xy = min([num_differing_sites(x, y) / length, 0.75 - (1 / length)])
     return f_xy
 
-def distance_xy():
-    d_xy = (-3 / 4) * math.log10(1 - (4 * fraction_xy(x, y) / 3))
+def distance_xy(x, y):
+    """ Calculates the distance between the sequences x and y
+    
+    :param x: DNA sequence of length, 'length'
+    :param y: DNA sequence of length, 'length'
+    :return: distance between x and y
+    """
+
+    d_xy = (-3 / 4) * math.log(1 - (4 * fraction_xy(x, y) / 3))
     return d_xy
 
 def distance_matrix(x, y):
@@ -112,7 +119,7 @@ def distance_matrix(x, y):
     # Distance between sequences x and y
     # d_xy = distance_xy()
 
-    yo = fraction_xy(x, y)
+    yo = distance_xy(x, y)
     print(yo)
 
 
@@ -136,8 +143,14 @@ def main():
     # rand_sequence = random_sequence(5)
     # mutate_tree(myTree.get_root(), rand_sequence)
 
-    seq1 = ["A", "C", "T", "G"]
-    seq2 = ["A", "C", "T", "T"]
+    seq1 = list("ACTG")
+    seq2 = list("ACTT")
+    seq3 = list("ACTA")
+    seq4 = list("CCTG")
+    seq5 = list("CCCC")
+    seq6 = list("GCGG")
+    sequence_set = [seq1, seq2, seq3, seq4, seq5, seq6]
+    print(sequence_set)
 
     distance_matrix(seq1, seq2)
 
