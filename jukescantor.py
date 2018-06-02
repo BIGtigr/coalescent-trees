@@ -105,7 +105,7 @@ def distance_xy(x, y):
     d_xy = (-3 / 4) * math.log(1 - (4 * fraction_xy(x, y) / 3))
     return d_xy
 
-def distance_matrix(x, y):
+def distance_matrix(sequence_set):
     """ Calculates the Jukes-Cantor distance matrix from a set of sequences
     
     :param x: DNA sequence of length, 'length'
@@ -114,13 +114,33 @@ def distance_matrix(x, y):
     """
 
     # Creating the matrix
-    # matrix = {nodes[i]: {nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
+    # matrix = {nodes[i]: { nodes[j]: matrix[i][j]for j in range(n)} for i in range(n)}
 
     # Distance between sequences x and y
     # d_xy = distance_xy()
 
-    yo = distance_xy(x, y)
-    print(yo)
+    # yo = distance_xy(x, y)
+    yo = sequence_set
+
+    matrix = {sequence_set[i]:
+                  {sequence_set[j]:
+                       distance_xy(list(sequence_set[i]), list(sequence_set[j]))
+                   for j, sequence_y in enumerate(sequence_set)
+                   }
+              for i, sequence_x in enumerate(sequence_set)
+              }
+    print(matrix)
+
+    # a = list(sequence_set[0])
+    # b = list(sequence_set[4])
+    # c = list(sequence_set[5])
+    # test = distance_xy(list(sequence_set[0]), list(sequence_set[4]))
+    # print(test)
+    # print(a, '\n', b, '\n', c)
+    # t1 = fraction_xy(a, b)
+    # t2 = fraction_xy(a, c)
+    # print(t1, t2)
+
 
 
 
@@ -143,15 +163,20 @@ def main():
     # rand_sequence = random_sequence(5)
     # mutate_tree(myTree.get_root(), rand_sequence)
 
-    seq1 = list("ACTG")
-    seq2 = list("ACTT")
-    seq3 = list("ACTA")
-    seq4 = list("CCTG")
-    seq5 = list("CCCC")
-    seq6 = list("GCGG")
+    seq1 = "ACTG"
+    seq2 = "ACTT"
+    seq3 = "ACTA"
+    seq4 = "CCTG"
+    seq5 = "CCCC"
+    seq6 = "CAGA"
+    seqlist1 = list("ACTG")
+    seqlist2 = list("ACTT")
+    seqlist3 = list("ACTA")
+    seqlist4 = list("CCTG")
+    seqlist5 = list("CCCC")
+    seqlist6 = list("CAGA")
     sequence_set = [seq1, seq2, seq3, seq4, seq5, seq6]
-    print(sequence_set)
 
-    distance_matrix(seq1, seq2)
+    distance_matrix(sequence_set)
 
 main()
