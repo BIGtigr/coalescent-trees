@@ -68,8 +68,8 @@ def mutate_tree(node, sequence, time=1, mu=0.3):
 def num_differing_sites(x, y):
     """ Calculates the number of differing sites between two sequences of the same length
     
-    :param x: DNA sequence of length, 'length'
-    :param y: DNA sequence of length, 'length'
+    :param x: list -> DNA sequence of length, 'length'
+    :param y: list -> DNA sequence of length, 'length'
     :return: number of differing sites between x and y
     """
 
@@ -85,8 +85,8 @@ def num_differing_sites(x, y):
 def fraction_xy(x, y):
     """ Returns the fraction of differing sites between two sequences x and y (equal length)
     
-    :param x: DNA sequence of length, 'length'
-    :param y: DNA sequence of length, 'length'
+    :param x: list -> DNA sequence of length, 'length'
+    :param y: list -> DNA sequence of length, 'length'
     :return: fraction of differing sites between x and y
     """
 
@@ -97,37 +97,27 @@ def fraction_xy(x, y):
 def distance_xy(x, y):
     """ Calculates the distance between the sequences x and y
     
-    :param x: DNA sequence of length, 'length'
-    :param y: DNA sequence of length, 'length'
+    :param x: list -> DNA sequence of length, 'length'
+    :param y: list -> DNA sequence of length, 'length'
     :return: distance between x and y
     """
 
     d_xy = (-3 / 4) * math.log(1 - (4 * fraction_xy(x, y) / 3))
     return d_xy
 
-def distance_matrix(sequence_set):
-    """ Calculates the Jukes-Cantor distance matrix from a set of sequences
-    
-    :param x: DNA sequence of length, 'length'
-    :param y: DNA sequence of length, 'length'
-    :return: Jukes-cantor distance matrix between sequences x and y
+def distance_matrix(node_set):
+    """ Calculates the Jukes-Cantor distance matrix from a set of nodes
+
+    :param node_set: set of node objects each with a sequence of length 'length'
+    :return: Jukes-cantor distance matrix between the sequences of the set of nodes
     """
 
-    # Creating the matrix
-    # matrix = {nodes[i]: { nodes[j]: matrix[i][j]for j in range(n)} for i in range(n)}
-
-    # Distance between sequences x and y
-    # d_xy = distance_xy()
-
-    # yo = distance_xy(x, y)
-    yo = sequence_set
-
-    matrix = {sequence_set[i]:
-                  {sequence_set[j]:
-                       distance_xy(list(sequence_set[i]), list(sequence_set[j]))
-                   for j, sequence_y in enumerate(sequence_set)
+    matrix = {node_set[i].get_label():
+                  {node_set[j].get_label():
+                       distance_xy(list(node_set[i].get_sequence()), list(node_set[j].get_sequence()))
+                   for j, node_y in enumerate(node_set)
                    }
-              for i, sequence_x in enumerate(sequence_set)
+              for i, node_x in enumerate(node_set)
               }
     return matrix
 
@@ -148,8 +138,21 @@ def simulating_distance_matrix(tree):
     :return: matrix for the distances between each of the trees leaves.
     """
 
+def pretty_print_dict(dict, decimals = 4):
+    """ Prints a dictionary in a readable format
+    
+    SOURCE: https://stackoverflow.com/questions/14139258/how-to-make-a-nice-matrix-from-a-dictionary
+    
+    :param dict: dictionary object
+    """
+    layout = ":^10." + str(decimals) + "}"
+    strs = " ".join("{"+"{0}{1}".format(i, layout) for i in range(len(dict.keys())+1))
+    # print(strs)
 
+    print(strs.format(" ", *dict))
 
+    for key in dict:
+        print(strs.format(key, *(float(dict[key].get(y, '-')) for y in dict)))
 
 def ncr(n, r):
     """ nCr caclculation. n choose r. combinations with repetition
@@ -161,7 +164,6 @@ def ncr(n, r):
     f = math.factorial
     return f(n) // (f(r) * f(n - r))
 
-
 def main():
     # myKingman = Kingman()
     # myTree = myKingman.simulate_one_tree(4, 100)
@@ -172,29 +174,24 @@ def main():
 
     ################ Calculating the distance matrix ##################
 
-    seq1 = "ACTG"
-    seq2 = "AAAG"
-    seq3 = "TCAA"
-    seq4 = "GGGT"
-    seq5 = "AAAA"
-    seq6 = "AGTG"
-    sequence_set = [seq1, seq2, seq3, seq4, seq5, seq6]
-    seq = sequence_set
-
-    # matrix = distance_matrix(sequence_set)
-
     # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
     myKingman = Kingman()
     myTree = myKingman.simulate_one_tree(10, 100)
 
-    # Generating a random sequence of length 50
+    # Generating a random sequence of length 50 and mutating down myTree
     rand_sequence = random_sequence(50)
-    root_seq = ''.join(rand_sequence)
-    print(f"Root seq:\n~ {root_seq}\n")
-    mutate_tree(myTree.get_root(), rand_sequence)
-    for i, leaf in enumerate(myTree.get_leaves()):
-        print(f"{leaf.get_label()} {''.join(leaf.get_sequence())}")
+    mutation_parameter = 0.0015
+    mutate_tree(myTree.get_root(), rand_sequence, mu=mutation_parameter)
 
+    # Finding the distance matrix from the set of leaf nodes
+    myTree_leaves = myTree.get_leaves()
+    matrix = distance_matrix(myTree_leaves)
+
+    # Printing the matrix in a nice format (from a dictionary)
+    print("Distances between the sequences of each pair of leaf nodes")
+    pretty_print_dict(matrix)
+
+    # Plotting the tree
     tree.plot_tree(myTree)
 
 
