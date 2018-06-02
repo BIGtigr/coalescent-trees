@@ -129,7 +129,7 @@ def distance_matrix(sequence_set):
                    }
               for i, sequence_x in enumerate(sequence_set)
               }
-    print(matrix)
+    return matrix
 
     # a = list(sequence_set[0])
     # b = list(sequence_set[4])
@@ -140,6 +140,13 @@ def distance_matrix(sequence_set):
     # t1 = fraction_xy(a, b)
     # t2 = fraction_xy(a, c)
     # print(t1, t2)
+
+def simulating_distance_matrix(tree):
+    """ Calculates and returns the distance matrix for the leaves of a given tree.
+    
+    :param tree: a tree class object
+    :return: matrix for the distances between each of the trees leaves.
+    """
 
 
 
@@ -163,20 +170,33 @@ def main():
     # rand_sequence = random_sequence(5)
     # mutate_tree(myTree.get_root(), rand_sequence)
 
-    seq1 = "ACTG"
-    seq2 = "ACTT"
-    seq3 = "ACTA"
-    seq4 = "CCTG"
-    seq5 = "CCCC"
-    seq6 = "CAGA"
-    seqlist1 = list("ACTG")
-    seqlist2 = list("ACTT")
-    seqlist3 = list("ACTA")
-    seqlist4 = list("CCTG")
-    seqlist5 = list("CCCC")
-    seqlist6 = list("CAGA")
-    sequence_set = [seq1, seq2, seq3, seq4, seq5, seq6]
+    ################ Calculating the distance matrix ##################
 
-    distance_matrix(sequence_set)
+    seq1 = "ACTG"
+    seq2 = "AAAG"
+    seq3 = "TCAA"
+    seq4 = "GGGT"
+    seq5 = "AAAA"
+    seq6 = "AGTG"
+    sequence_set = [seq1, seq2, seq3, seq4, seq5, seq6]
+    seq = sequence_set
+
+    # matrix = distance_matrix(sequence_set)
+
+    # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
+    myKingman = Kingman()
+    myTree = myKingman.simulate_one_tree(10, 100)
+
+    # Generating a random sequence of length 50
+    rand_sequence = random_sequence(50)
+    root_seq = ''.join(rand_sequence)
+    print(f"Root seq:\n~ {root_seq}\n")
+    mutate_tree(myTree.get_root(), rand_sequence)
+    for i, leaf in enumerate(myTree.get_leaves()):
+        print(f"{leaf.get_label()} {''.join(leaf.get_sequence())}")
+
+    tree.plot_tree(myTree)
+
+
 
 main()
