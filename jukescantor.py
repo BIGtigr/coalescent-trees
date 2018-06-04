@@ -1,7 +1,7 @@
 import random as ra
 import math
 import numpy as np
-import tree
+from tree import plot_tree, compute_upgma_tree
 from kingman import Kingman
 
 def random_sequence(length):
@@ -158,8 +158,6 @@ def simulate_distance_matrix(tree):
     leaves = tree.get_leaves()
     sorted_leaves = get_leaves_in_order(leaves)
     matrix = distance_matrix(sorted_leaves)
-    display_distance_matrix(matrix)
-
     return matrix
 
 def display_distance_matrix(matrix, round_to=4, col_width=9):
@@ -193,6 +191,33 @@ def pretty_print_dict(dict, decimals = 4):
     for key in dict:
         print(strs.format(key, *(float(dict[key].get(y, '-')) for y in dict)))
 
+def simulate_and_reconstruct(tree, sequence_length, mutation_parameter):
+    """ Simulates a tree with a sequence of length 'sequence_length' and reconstructs it.
+    
+    Reconstruction is done by creating a Jukes Cantor distance matrix then converting it into a UPGMA
+    tree. The distance matrix and resulting UPGMA tree is then displayed
+    
+    :param tree: tree -> tree to be simulated with a sequence
+    :param sequence_length: int -> DNA sequence length to create sequence for simulation 
+    :param mutation_parameter: float -> the rate of mutation
+    :return: Displayed distance matrix and plotted reconstructed UPGMA tree
+    """
+
+    # Mutating sequence down tree
+    sequence = random_sequence(sequence_length)
+    mutate_tree(tree.get_root(), sequence, mu=mutation_parameter)
+
+    # Creating distance matrix
+    matrix = simulate_distance_matrix(tree)
+    print(f"~~~~~~~~~~ Distance matrix (L = {sequence_length}) ~~~~~~~~~~")
+    print("(Note: Rows and cols correspond to labelled leaf nodes)")
+    display_distance_matrix(matrix)
+
+    # Reconstructing and plotting
+    reconstructed_tree = compute_upgma_tree(matrix)
+    print(f"~~~~~~~~~~ UPGMA Tree (L = {sequence_length}) ~~~~~~~~~~\n")
+    plot_tree(reconstructed_tree)
+
 def ncr(n, r):
     """ nCr caclculation. n choose r. combinations with repetition
 
@@ -204,15 +229,18 @@ def ncr(n, r):
     return f(n) // (f(r) * f(n - r))
 
 def main():
-    # myKingman = Kingman()
-    # myTree = myKingman.simulate_one_tree(4, 100)
-    # tree.plot_tree(myTree)
-    #
-    # rand_sequence = random_sequence(5)
-    # mutate_tree(myTree.get_root(), rand_sequence)
+    """
+    myKingman = Kingman()
+    myTree = myKingman.simulate_one_tree(4, 100)
+    tree.plot_tree(myTree)
+
+    rand_sequence = random_sequence(5)
+    mutate_tree(myTree.get_root(), rand_sequence)
+    """
 
     ################ Calculating the distance matrix ##################
 
+    """
     # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
     myKingman = Kingman()
     myTree = myKingman.simulate_one_tree(10, 100)
@@ -225,58 +253,26 @@ def main():
 
     # Finding the distance matrix from the set of leaf nodes
     matrix = simulate_distance_matrix(myTree)
-    # print(matrix)
+    display_distance_matrix(matrix)
 
     # Plotting the tree
-    # tree.plot_tree(myTree)
-
+    tree.plot_tree(myTree)
+    """
 
     ################ Simulating trees with different sequence lengths ##################
 
     # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
-    # myKingman = Kingman()
-    # myTree = myKingman.simulate_one_tree(10, 100)
-    # # tree.plot_tree(myTree)
-    #
-    # # Mutating a sequence length of 50 for tree_50
-    # tree_50 = myTree
-    # mutation_parameter = 0.0015
-    # sequence_length = 50
-    # rand_sequence = random_sequence(sequence_length)
-    # mutate_tree(tree_50.get_root(), rand_sequence, mu=mutation_parameter)
-    # m50 = simulate_distance_matrix(tree_50)
-    # t50 = tree.compute_upgma_tree(m50)
-    # # tree.plot_tree(t50)
-    #
-    # # Mutating a sequence length of 200 for tree_200
-    # tree_200 = myTree
-    # mutation_parameter = 0.0015
-    # sequence_length = 200
-    # rand_sequence = random_sequence(sequence_length)
-    # mutate_tree(myTree.get_root(), rand_sequence, mu=mutation_parameter)
-    #
-    # # Mutating a sequence length of 1000 for tree_1000
-    # mutation_parameter = 0.0015
-    # sequence_length = 1000
-    # rand_sequence = random_sequence(sequence_length)
-    # mutate_tree(myTree.get_root(), rand_sequence, mu=mutation_parameter)
-    # tree_1000 = myTree
+    myKingman = Kingman()
+    myTree = myKingman.simulate_one_tree(10, 100)
+    print("~~~~~~~~~~ Original Tree ~~~~~~~~~~")
+    # tree.plot_tree(myTree)
 
+    # Mutating a sequence length of 50 for tree_50
+    mutation_parameter = 0.0015
 
-    # matrix_50 = simulate_distance_matrix(tree_50)
-    # sometree_50 = tree.compute_upgma_tree(matrix_50)
-    #
-    #
-    # matrix_200 = simulate_distance_matrix(tree_200)
-    # sometree_200 = tree.compute_upgma_tree(matrix_200)
-    #
-    #
-    # matrix_1000 = simulate_distance_matrix(tree_1000)
-    # sometree_1000 = tree.compute_upgma_tree(matrix_1000)
-
-    # tree.plot_tree(sometree_50)
-    # tree.plot_tree(sometree_200)
-    # tree.plot_tree(sometree_1000)
+    simulate_and_reconstruct(myTree, 50, mutation_parameter)
+    simulate_and_reconstruct(myTree, 200, mutation_parameter)
+    simulate_and_reconstruct(myTree, 1000, mutation_parameter)
 
 
 

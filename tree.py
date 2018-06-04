@@ -30,7 +30,7 @@ def compute_upgma_tree(matrix):
     import itertools as it
 
     n = len(matrix)
-    nodes = [Node(str(i + 1)) for i in range(n)]
+    nodes = [Node(str(i)) for i in range(n)]
     for node in nodes:
         node.set_height(0)
     matrix = {nodes[i]: {nodes[j]: matrix[i][j] for j in range(n)} for i in range(n)}
