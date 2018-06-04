@@ -158,16 +158,24 @@ def simulate_distance_matrix(tree):
     leaves = tree.get_leaves()
     sorted_leaves = get_leaves_in_order(leaves)
     matrix = distance_matrix(sorted_leaves)
-    print(matrix)
+    display_distance_matrix(matrix)
 
     return matrix
 
-def display_distance_matrix(matrix):
-    """ Displays a distance matrix in an easy to read fashin
+def display_distance_matrix(matrix, round_to=4, col_width=9):
+    """ Displays a distance matrix in an easy to read fashion
     
-    :param matrix: 
-    :return: 
+    :param matrix: numpy.array of a distance matrix
     """
+
+    size = len(matrix)
+    layout = ":^" + str(col_width) + "}"
+    scaffold = " ".join("{"+"{0}{1}".format(leaf_num, layout) for leaf_num in range(size+1))
+
+    print(scaffold.format(" ", *(i for i in range(size+1))))
+
+    for i in range(size):
+        print(scaffold.format(i, *(round(matrix[i][j], round_to) if matrix[i][j] != 0 else '-' for j in range(size))))
 
 def pretty_print_dict(dict, decimals = 4):
     """ Prints a dictionary in a readable format
