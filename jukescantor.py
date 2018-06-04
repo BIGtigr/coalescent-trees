@@ -41,7 +41,7 @@ def mutate(sequence, time, mu):
 
     return sequence
 
-def mutate_tree(node, sequence, time=1, mu=0.3):
+def mutate_tree(node, sequence, mu=0.0015):
     """ Recursively mutates down the branches of a tree at node
     
     :param node: Node to mutate and recursively mutate it's children
@@ -52,7 +52,8 @@ def mutate_tree(node, sequence, time=1, mu=0.3):
     """
 
     if node.is_root() == False:
-        sequence = mutate(sequence, time, mu)
+        branch_length = node.get_parent().get_height() - node.get_height()
+        sequence = mutate(sequence, branch_length, mu)
     node.set_sequence(sequence)
 
     if node.is_leaf() == True:
@@ -264,18 +265,12 @@ def main():
     print("~~~~~~~~~~ Original Tree ~~~~~~~~~~")
     plot_tree(myTree)
 
-    # Mutating a sequence length of 50 for tree_50
+    # Simulating and reconstructing trees with sequence lengths 50, 200, and 1000
     mutation_parameter = 0.0015
-
-    # seq = random_sequence(10)
-    # mutate_tree(myTree.get_root(), seq, mu = mutation_parameter)
-    # for i in myTree.get_leaves():
-    #     print(i.get_sequence())
-
-    simulate_and_reconstruct(myTree, 10000, mutation_parameter)
+    simulate_and_reconstruct(myTree, 50, mutation_parameter)
     simulate_and_reconstruct(myTree, 200, mutation_parameter)
     simulate_and_reconstruct(myTree, 1000, mutation_parameter)
 
     print("As the sequence length increases, the tree reconstructions resemble the original tree more and more.")
 
-# main()
+main()
