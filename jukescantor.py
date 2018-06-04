@@ -29,7 +29,7 @@ def mutate(sequence, time, mu):
 
     length = len(sequence)
 
-    # Calculating the number of mutaitons according to a poisson distribution with total rate length*time*mu
+    # Calculating the number of mutations according to a poisson distribution with total rate length*time*mu
     numMutation = np.random.poisson(length * time * mu)
 
     # For each mutation, choose a site and mutate it
@@ -230,9 +230,8 @@ def ncr(n, r):
 
 def main():
     """
-    myKingman = Kingman()
-    myTree = myKingman.simulate_one_tree(4, 100)
-    tree.plot_tree(myTree)
+    myTree = simulate_one_tree(4, 100)
+    plot_tree(myTree)
 
     rand_sequence = random_sequence(5)
     mutate_tree(myTree.get_root(), rand_sequence)
@@ -242,8 +241,7 @@ def main():
 
     """
     # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
-    myKingman = Kingman()
-    myTree = myKingman.simulate_one_tree(10, 100)
+    myTree = simulate_one_tree(10, 100)
 
     # Generating a random sequence of length 50 and mutating down myTree
     sequence_length = 50
@@ -256,7 +254,7 @@ def main():
     display_distance_matrix(matrix)
 
     # Plotting the tree
-    tree.plot_tree(myTree)
+    plot_tree(myTree)
     """
 
     ################ Simulating trees with different sequence lengths ##################
@@ -280,4 +278,4 @@ def main():
 
     print("As the sequence length increases, the tree reconstructions resemble the original tree more and more.")
 
-main()
+# main()
