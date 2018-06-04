@@ -192,7 +192,7 @@ def pretty_print_dict(dict, decimals = 4):
     for key in dict:
         print(strs.format(key, *(float(dict[key].get(y, '-')) for y in dict)))
 
-def simulate_and_reconstruct(tree, sequence_length, mutation_parameter):
+def simulate_and_reconstruct(tree, sequence_length, mutation_parameter, display=True):
     """ Simulates a tree with a sequence of length 'sequence_length' and reconstructs it.
     
     Reconstruction is done by creating a Jukes Cantor distance matrix then converting it into a UPGMA
@@ -210,14 +210,17 @@ def simulate_and_reconstruct(tree, sequence_length, mutation_parameter):
 
     # Creating distance matrix
     matrix = simulate_distance_matrix(tree)
-    print(f"~~~~~~~~~~ Distance matrix (L = {sequence_length}) ~~~~~~~~~~")
-    print("(Note: Rows and cols correspond to labelled leaf nodes)")
-    display_distance_matrix(matrix)
+    if display:
+        print(f"~~~~~~~~~~ Distance matrix (L = {sequence_length}) ~~~~~~~~~~")
+        print("(Note: Rows and cols correspond to labelled leaf nodes)")
+        display_distance_matrix(matrix)
 
     # Reconstructing and plotting
     reconstructed_tree = compute_upgma_tree(matrix)
-    print(f"~~~~~~~~~~ UPGMA Tree (L = {sequence_length}) ~~~~~~~~~~\n")
-    plot_tree(reconstructed_tree)
+    if display:
+        print(f"~~~~~~~~~~ UPGMA Tree (L = {sequence_length}) ~~~~~~~~~~\n")
+        plot_tree(reconstructed_tree)
+    return reconstructed_tree
 
 def ncr(n, r):
     """ nCr caclculation. n choose r. combinations with repetition
@@ -273,4 +276,4 @@ def main():
 
     print("As the sequence length increases, the tree reconstructions resemble the original tree more and more.")
 
-main()
+# main()
