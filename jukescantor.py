@@ -126,7 +126,7 @@ def distance_matrix(node_set):
     """
 
     matrix = [
-        [distance_xy(node_x.get_sequence(),node_y.get_sequence()) for node_y in node_set]
+        [distance_xy(node_x.get_sequence(), node_y.get_sequence()) for node_y in node_set]
         for node_x in node_set
     ]
     matrix = np.array(matrix)
@@ -265,16 +265,15 @@ def main():
     myKingman = Kingman()
     myTree = myKingman.simulate_one_tree(10, 100)
     print("~~~~~~~~~~ Original Tree ~~~~~~~~~~")
-    # tree.plot_tree(myTree)
+    plot_tree(myTree)
 
     # Mutating a sequence length of 50 for tree_50
     mutation_parameter = 0.0015
 
-    simulate_and_reconstruct(myTree, 50, mutation_parameter)
+    simulate_and_reconstruct(myTree, 10000, mutation_parameter)
     simulate_and_reconstruct(myTree, 200, mutation_parameter)
     simulate_and_reconstruct(myTree, 1000, mutation_parameter)
 
-
-
+    print("As the sequence length increases, the tree reconstructions resemble the original tree more and more.")
 
 main()
