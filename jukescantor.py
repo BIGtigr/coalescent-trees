@@ -2,7 +2,7 @@ import random as ra
 import math
 import numpy as np
 from tree import plot_tree, compute_upgma_tree
-from kingman import Kingman
+from kingman import simulate_one_tree
 
 def random_sequence(length):
     """ Generates a random sequence of DNA bases of a given length
@@ -262,13 +262,17 @@ def main():
     ################ Simulating trees with different sequence lengths ##################
 
     # Generating a tree with 10 leaves (n=10) and 100 population size (pop_size=100)
-    myKingman = Kingman()
-    myTree = myKingman.simulate_one_tree(10, 100)
+    myTree = simulate_one_tree(10, 100)
     print("~~~~~~~~~~ Original Tree ~~~~~~~~~~")
     plot_tree(myTree)
 
     # Mutating a sequence length of 50 for tree_50
     mutation_parameter = 0.0015
+
+    # seq = random_sequence(10)
+    # mutate_tree(myTree.get_root(), seq, mu = mutation_parameter)
+    # for i in myTree.get_leaves():
+    #     print(i.get_sequence())
 
     simulate_and_reconstruct(myTree, 10000, mutation_parameter)
     simulate_and_reconstruct(myTree, 200, mutation_parameter)
