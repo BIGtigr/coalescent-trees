@@ -7,9 +7,13 @@ def mcmc():
     pass
 
 def main():
-    my_tree = simulate_one_tree(10, 100)
-    plot_tree(my_tree)
-    new_tree = simulate_and_reconstruct(my_tree, 1000, 0.0015, display=False)
-    plot_tree(new_tree)
+    population_size = 100
+    my_tree = simulate_one_tree(10, population_size)
+    # plot_tree(my_tree)
+    reconstructed_tree = simulate_and_reconstruct(my_tree, 1000, 0.0015, display=False)
+    # plot_tree(reconstructed_tree)
+
+
+
 
 main()
